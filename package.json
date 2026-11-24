@@ -1,0 +1,12 @@
+{
+  "name": "stock-desk-game",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "《今天也想回本》桌面炒股模拟小游戏",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "serve": "node scripts/serve.mjs",
+    "test": "node --experimental-strip-types --test tests/*.test.ts"
+  }
+}

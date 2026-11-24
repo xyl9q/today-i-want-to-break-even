@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="theme-color" content="#111722">
+  <title>今天也想回本 · 工位炒股模拟器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="boot" class="boot-screen">
+    <div class="boot-card">
+      <div class="boot-logo">ST</div>
+      <p class="eyebrow">WORKSTATION SURVIVAL GAME</p>
+      <h1>今天也想回本</h1>
+      <p>炒股、上班、抢 Token。三件事里至少做好一件。</p>
+      <div class="boot-rules">
+        <span>09:30 开盘</span><span>11:40 公益站补给</span><span>15:00 结算</span>
+      </div>
+      <p id="career-copy" class="career-copy">新职业存档 · 初始资金 ¥100,000</p>
+      <button id="start-game" class="primary wide">坐到工位，开始今天</button>
+      <small>全部内容均为虚构，不连接真实交易或公益站。</small>
+    </div>
+  </div>
+
+  <main id="desktop" class="desktop hidden">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">ST</span><strong>工位终端</strong><em>M2.1 · 连续职业版</em></div>
+      <div class="day-status">
+        <span id="career-day" class="career-day">DAY 1</span>
+        <span id="game-time">09:20</span>
+        <span id="market-phase" class="phase">集合竞价</span>
+      </div>
+      <div class="top-meters">
+        <div class="mini-meter"><label>工作进度 <b id="work-value">18%</b></label><i><u id="work-bar"></u></i></div>
+        <div class="mini-meter danger"><label>摸鱼暴露 <b id="risk-value">8%</b></label><i><u id="risk-bar"></u></i></div>
+      </div>
+      <div class="top-actions"><button id="settings-button" class="settings-button" title="设置">⚙</button><button id="panic-button" class="panic"><kbd>空格</kbd> 老板键</button></div>
+    </header>
+
+    <section class="workspace">
+      <nav class="dock" aria-label="应用">
+        <button data-app="market" class="dock-item active"><span>📈</span><b>行情</b><i></i></button>
+        <button data-app="work" class="dock-item"><span>💬</span><b>工作</b><i id="task-badge" class="badge">4</i></button>
+        <button data-app="station" class="dock-item"><span>🌐</span><b>公益站</b><i id="drop-dot"></i></button>
+        <button data-app="ide" class="dock-item"><span>⌨️</span><b>IDE</b><i></i></button>
+      </nav>
+
+      <section id="market-app" class="window app-window">
+        <div class="window-title"><div><span class="lights"><i></i><i></i><i></i></span><strong>韭菜 Pro · 模拟终端</strong></div><div class="connection"><i></i> SIMULATION</div></div>
+        <div class="market-layout">
+          <aside class="watchlist">
+            <div class="panel-heading"><span>自选股</span><small>涨跌幅</small></div>
+            <div id="stock-list"></div>
+            <div class="watch-tip">价格红涨绿跌，仅为虚构行情</div>
+          </aside>
+          <section class="quote-panel">
+            <div class="quote-head">
+              <div><span id="stock-symbol">MFCM</span><h2 id="stock-name">摸鱼传媒</h2><small id="stock-sector">内容 / 热点</small></div>
+              <div class="big-price"><strong id="stock-price">18.72</strong><span id="stock-change">+0.00%</span></div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="price-chart"></canvas>
+              <div class="chart-labels"><span>09:30</span><span>11:30 / 13:00</span><span>15:00</span></div>
+            </div>
+            <div class="news-strip"><b>快讯</b><span id="news-copy">集合竞价阶段，办公室里只有键盘声和叹气声。</span></div>
+            <div id="radar-card" class="radar-card hidden"></div>
+          </section>
+          <aside class="trade-panel">
+            <div class="account-card"><span>总资产</span><strong id="total-assets">¥100,000.00</strong><small id="total-return">今日 +0.00%</small></div>
+            <div class="order-book" id="order-book"></div>
+            <div class="trade-tabs"><button data-side="buy" class="active">买入</button><button data-side="sell">卖出</button></div>
+            <label class="field"><span>限价</span><div><button id="price-minus">−</button><input id="order-price" type="number" step="0.01"><button id="price-plus">＋</button></div></label>
+            <label class="field"><span>数量</span><input id="order-quantity" type="number" step="100" min="100" value="100"></label>
+            <div class="quick-qty"><button data-qty="100">1 手</button><button data-qty="500">5 手</button><button data-qty="max">全仓</button></div>
+            <button id="submit-order" class="trade-submit buy">买入 MFCM</button>
+            <div class="position-line"><span>持仓 <b id="position-shares">0</b> 股</span><span>成本 <b id="position-cost">--</b></span></div>
+          </aside>
+        </div>
+        <div class="bottom-panels">
+          <section><div class="panel-heading"><span>持仓</span><small id="cash-value">可用 ¥100,000.00</small></div><div id="positions" class="positions empty">还没有持仓。谨慎是好事，也可能只是没想好买什么。</div></section>
+          <section><div class="panel-heading"><span>委托</span><small>点击撤单</small></div><div id="orders" class="orders empty">暂无未成交委托</div></section>
+        </div>
+      </section>
+
+      <section id="work-app" class="window app-window hidden">
+        <div class="window-title"><div><span class="lights"><i></i><i></i><i></i></span><strong>企业沟通 · 未读消息</strong></div><span>状态：忙碌（其实在看盘）</span></div>
+        <div class="work-layout"><aside><div class="avatar">研三</div><h3>实习开发工程师</h3><p>今日目标：安全活到收盘</p><div class="work-score"><span>工作进度</span><strong id="work-large">18%</strong></div></aside><section><h2>待处理消息</h2><p>处理任务可以降低暴露度，但会错过几分钟行情。</p><div id="task-list" class="task-list"></div></section></div>
+      </section>
+
+      <section id="station-app" class="window app-window hidden">
+        <div class="browser-bar"><span class="lights"><i></i><i></i><i></i></span><div>🔒 https://open-good.example/checkin</div><button>☆</button></div>
+        <div class="station-page">
+          <header><div class="station-logo">OPEN<br>GOOD</div><div><p class="eyebrow">COMMUNITY COMPUTE COMMONS</p><h2>开源公益站</h2><p>让每一份闲置算力，都落到真正需要的人手里。</p></div><div class="token-wallet"><span>我的 Token</span><strong id="token-value">0</strong></div></header>
+          <div class="station-grid">
+            <section class="checkin-card"><span class="card-icon">📅</span><h3>每日签到</h3><p>签到获得 2 Token，并解锁今日补给资格。</p><button id="checkin-button" class="primary">立即签到</button><small id="checkin-copy">连续签到：0 天</small></section>
+            <section class="drop-card"><span class="card-icon">⚡</span><h3>限时补给</h3><p id="drop-copy">下一场：11:40 午间补给</p><button id="claim-button" class="accent">蹲守补给</button><small>先到先得 · 每人每日一次</small></section>
+            <section class="claim-game hidden" id="claim-game"><div><span>人机校验</span><strong id="claim-timer">剩余 8 分钟</strong></div><p>记住顺序，然后依次点击对应颜色。</p><div id="claim-sequence" class="claim-sequence"></div><div class="color-buttons"><button data-color="0"></button><button data-color="1"></button><button data-color="2"></button><button data-color="3"></button></div></section>
+          </div>
+          <section class="token-shop"><div><h3>Token 小铺</h3><p>把社区贡献兑换成这局里的小小优势。</p></div><button data-perk="radar"><b>市场雷达</b><span>预览下一条快讯</span><em>4 T</em></button><button data-perk="coffee"><b>咖啡续命</b><span>暴露度立减 24</span><em>3 T</em></button><button data-perk="cancel"><b>光速撤单</b><span>撤销全部委托</span><em>2 T</em></button></section>
+          <footer>虚构页面 · 不对应任何真实公益站 · 不发放真实 Token</footer>
+        </div>
+      </section>
+
+      <section id="ide-app" class="window app-window hidden ide-window">
+        <div class="ide-tabs"><span class="active">祖传支付模块重构.ts ●</span><span>日报.md</span><span>README_真的最终版.md</span></div>
+        <div class="ide-main"><div class="file-tree"><b>EXPLORER</b><p>⌄ src</p><p class="indent">◇ core</p><p class="indent2 active">TS payment.ts</p><p class="indent2">TS dont-touch.ts</p><p class="indent">◇ utils</p><p class="indent2">TS overtime.ts</p><p>⌄ tests</p><p class="indent">TS hope.test.ts</p></div><pre><code><span class="line">01</span> <i>// TODO: 这段代码能跑，不要动</i>
+<span class="line">02</span> <b>export async function</b> <strong>refactorLegacyPay</strong>() {
+<span class="line">03</span>   <b>const</b> deadline = <em>'今天下班前'</em>;
+<span class="line">04</span>   <b>const</b> requirement = await askProduct();
+<span class="line">05</span>
+<span class="line">06</span>   <b>if</b> (requirement.changedAgain) {
+<span class="line">07</span>     <b>return</b> createAnotherMeeting();
+<span class="line">08</span>   }
+<span class="line">09</span>
+<span class="line">10</span>   <i>// FIXME: 为什么这个 if 有 17 层？</i>
+<span class="line">11</span>   <b>return</b> works ? <em>'别碰'</em> : <em>'也别碰'</em>;
+<span class="line">12</span> }</code></pre></div>
+        <div class="ide-status"><span>main*</span><span>Problems 37&nbsp;&nbsp; Warnings 128</span><span>UTF-8&nbsp;&nbsp; TypeScript</span></div>
+      </section>
+    </section>
+
+    <footer class="taskbar">
+      <div id="boss-indicator" class="boss away"><span class="boss-face">👔</span><div><b>老板：不在附近</b><small>可以呼吸</small></div></div>
+      <div class="ticker" id="ticker">摸鱼传媒 18.72　补丁科技 42.10　新能源饼 27.56</div>
+      <div class="system-tray"><span>🔊</span><span>📶</span><span id="tray-time">09:20</span></div>
+    </footer>
+  </main>
+
+  <div id="toast-stack" class="toast-stack"></div>
+  <div id="boss-alert" class="boss-alert hidden">
+    <div class="alert-vignette"></div>
+    <div class="footsteps"><i>👞</i><i>👞</i><i>👞</i></div>
+    <section><p>WARNING · 脚步声接近</p><strong>老板还有 <b id="boss-countdown">5</b> 分钟到达</strong><span>按空格立即切换到 IDE</span></section>
+  </div>
+
+  <div id="settings-overlay" class="settings-overlay hidden">
+    <section class="settings-card">
+      <header><div><p class="eyebrow">SYSTEM PREFERENCES</p><h2>游戏设置与存档</h2></div><button id="settings-close">×</button></header>
+      <div class="setting-row"><div><b>时间速度</b><span>一秒对应多少游戏分钟</span></div><select id="speed-setting"><option value="1">舒缓 · 1×</option><option value="1.5">标准 · 1.5×</option><option value="2">快速 · 2×</option><option value="3">极速 · 3×</option></select></div>
+      <label class="setting-row"><div><b>提示音</b><span>老板接近时播放脚步与警报</span></div><input id="sound-setting" type="checkbox"></label>
+      <label class="setting-row"><div><b>设备震动</b><span>移动设备收到老板预警时震动</span></div><input id="vibration-setting" type="checkbox"></label>
+      <label class="setting-row"><div><b>收盘自动存档</b><span>保存现金、持仓、Token 与累计统计</span></div><input id="autosave-setting" type="checkbox"></label>
+      <div class="save-card"><div><span>当前职业存档</span><strong id="save-summary">尚未建立存档</strong><small id="save-time">完成第一天后自动保存</small></div><i>💾</i></div>
+      <footer><button id="clear-save" class="danger-button">清除职业存档</button><button id="settings-done" class="primary">保存设置</button></footer>
+    </section>
+  </div>
+  <div id="result-overlay" class="result-overlay hidden"><section><p class="eyebrow">MARKET CLOSED</p><h2 id="result-title">今天回本了吗？</h2><div id="result-grade" class="result-grade">B</div><div id="result-stats"></div><p id="result-copy"></p><button id="restart-button" class="primary wide">明天再看一眼</button></section></div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
