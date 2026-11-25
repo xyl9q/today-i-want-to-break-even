@@ -6,6 +6,8 @@
 
 《今天也想回本》是一款发生在工位电脑里的桌面炒股模拟小游戏。
 
+[下载 Android APK](https://github.com/xyl9q/today-i-want-to-break-even/releases/latest)
+
 灵感来自身边同事的日常：早上到工位先打开股票，午休醒来再看一眼，下午收盘前继续纠结要不要把短线做成长线。于是我把行情、老板巡查、工作群消息和公益站签到揉在一起，做成了一场从 09:20 持续到 15:00 的工位生存挑战。
 
 ## 玩法
@@ -35,6 +37,8 @@ npm run serve
 ```
 
 然后访问 `http://127.0.0.1:4180`。
+
+Android 用户可以在 [Releases](https://github.com/xyl9q/today-i-want-to-break-even/releases) 下载离线 APK。安装包未上架应用商店，首次安装可能需要允许浏览器或文件管理器“安装未知应用”。
 
 ## 技术说明
 
